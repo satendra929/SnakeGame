@@ -17,24 +17,31 @@ else:
     H_SCORE = max(list(map(int,str_scores)))
 STR_MSG = "GAME OVER"
 
+#Color Codes
 WHITE = (255, 255, 255)
 BLACK = (0,0,0)
 RED = (255,0,0)
 GRAY = (128,128,128)
+
+#Game parameters
 SPEED = 3
 SCORE = 0
 GAME_OVER = False
 (width, height) = (400, 400)
 pygame.init()
+
+#Setting up the display
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Snake Game")
 fps = pygame.time.Clock()
 screen.fill(BLACK)
+
 #setup font
 myfont = pygame.font.SysFont('monospace', 30)
 text = myfont.render(STR_MSG, True, WHITE)
 pygame.display.update()
 
+#Snake Class
 class Snake() :
     global screen
     def __init__(self):
@@ -78,10 +85,14 @@ class Snake() :
 
     def check_collisions(self):
         if not all((cor >= 5 and cor <= 395) for cor in self.head_position):
+            if SCORE > H_SCORE :
+                STR_MSG = "YEAH ! HIGHSCORE :)"
             screen.blit(text,(100,200))
             pygame.display.update()
             return True
         if self.head_position in self.body[1:]:
+            if SCORE > H_SCORE :
+                STR_MSG = "YEAH ! HIGHSCORE :)"
             screen.blit(text,(100,200))
             pygame.display.update()
             return True
@@ -134,9 +145,8 @@ while True :
         rs.draw_rat()
         snake_object.position_update()
         if snake_object.check_collisions():
-            file.write((str)(SCORE))
-            if SCORE > H_SCORE :
-                STR_MSG = "YEAH ! HIGHSCORE :)"
+            if (SCORE != 0) :
+                file.write((str)(SCORE)+"\n")
             GAME_OVER = True
             SPEED = 27
     else :
